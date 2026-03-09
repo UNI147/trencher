@@ -38,8 +38,29 @@
         <Filename Value="unit1.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
+      </Unit>
+      <Unit>
+        <Filename Value="models\map.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Map"/>
+      </Unit>
+      <Unit>
+        <Filename Value="models\player.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Player"/>
+      </Unit>
+      <Unit>
+        <Filename Value="core\resourcemanager.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ResourceManager"/>
+      </Unit>
+      <Unit>
+        <Filename Value="core\gameengine.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GameEngine"/>
       </Unit>
     </Units>
   </ProjectOptions>
@@ -51,6 +72,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="models;core"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>
