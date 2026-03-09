@@ -120,7 +120,6 @@ begin
   if FMoveUp then MoveY := -FSpeed * DeltaTime;
   if FMoveDown then MoveY := FSpeed * DeltaTime;
 
-  // Коррекция диагонали
   if (MoveX <> 0) and (MoveY <> 0) then
   begin
     MoveX := MoveX * DIAGONAL_FACTOR;
@@ -132,13 +131,15 @@ begin
 
   if (MoveX <> 0) or (MoveY <> 0) then
   begin
-    FPlayer.Move(MoveX, MoveY, FMap.Width, FMap.Height);
+    FPlayer.Move(MoveX, MoveY, FMap, FResources);  // <-- изменено
     Moved := True;
   end
   else
     Moved := False;
 
-  // Проверка переходов при смене тайла
+  // Обновление анимации тайлов
+  FResources.UpdateAnimation(DeltaTime);            // <-- добавлено
+
   if (FPlayer.TileX <> OldTileX) or (FPlayer.TileY <> OldTileY) then
     CheckTransitions;
 

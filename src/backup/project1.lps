@@ -11,7 +11,7 @@
         <EditorIndex Value="2"/>
         <TopLine Value="9"/>
         <CursorPos X="3" Y="14"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -21,9 +21,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <TopLine Value="38"/>
-        <CursorPos X="11" Y="54"/>
-        <UsageCount Value="21"/>
+        <TopLine Value="88"/>
+        <CursorPos X="5" Y="111"/>
+        <UsageCount Value="22"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -31,7 +31,7 @@
         <Filename Value="unit1.lfm"/>
         <EditorIndex Value="6"/>
         <CursorPos Y="17"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit>
@@ -40,8 +40,9 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Map"/>
         <EditorIndex Value="1"/>
+        <TopLine Value="78"/>
         <CursorPos X="17" Y="36"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -49,62 +50,33 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Player"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="83"/>
-        <CursorPos X="5" Y="106"/>
-        <UsageCount Value="21"/>
+        <CursorPos X="5" Y="147"/>
+        <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="core\resourcemanager.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ResourceManager"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="100"/>
-        <CursorPos X="5" Y="123"/>
-        <UsageCount Value="21"/>
+        <TopLine Value="237"/>
+        <CursorPos X="31" Y="247"/>
+        <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="core\gameengine.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GameEngine"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="17"/>
-        <CursorPos X="25" Y="26"/>
-        <UsageCount Value="21"/>
+        <TopLine Value="125"/>
+        <CursorPos X="5" Y="147"/>
+        <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="464" Column="5" TopLine="441"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="452" Column="20" TopLine="442"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="38" Column="30" TopLine="33"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="434" Column="5" TopLine="412"/>
-      </Position>
-      <Position>
-        <Filename Value="models\map.pas"/>
-        <Caret Line="72" Column="5" TopLine="49"/>
-      </Position>
-      <Position>
-        <Filename Value="models\player.pas"/>
-        <Caret Line="106" Column="5" TopLine="83"/>
-      </Position>
-      <Position>
-        <Filename Value="core\resourcemanager.pas"/>
-        <Caret Line="124" Column="5" TopLine="101"/>
-      </Position>
       <Position>
         <Filename Value="core\gameengine.pas"/>
         <Caret Line="298" Column="5" TopLine="275"/>
@@ -196,6 +168,34 @@
       <Position>
         <Filename Value="unit1.pas"/>
         <Caret Line="54" Column="11" TopLine="38"/>
+      </Position>
+      <Position>
+        <Filename Value="core\gameengine.pas"/>
+        <Caret Line="26" Column="25" TopLine="17"/>
+      </Position>
+      <Position>
+        <Filename Value="core\gameengine.pas"/>
+        <Caret Line="48" Column="25" TopLine="36"/>
+      </Position>
+      <Position>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="54" Column="11" TopLine="38"/>
+      </Position>
+      <Position>
+        <Filename Value="core\resourcemanager.pas"/>
+        <Caret Line="123" Column="5" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="models\player.pas"/>
+        <Caret Line="106" Column="5" TopLine="83"/>
+      </Position>
+      <Position>
+        <Filename Value="core\gameengine.pas"/>
+        <Caret Line="292" Column="31" TopLine="289"/>
+      </Position>
+      <Position>
+        <Filename Value="core\resourcemanager.pas"/>
+        <Caret Line="232" Column="5" TopLine="209"/>
       </Position>
     </JumpHistory>
     <RunParams>

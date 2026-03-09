@@ -8,6 +8,8 @@ uses
   Classes, SysUtils, Map, Player, ResourceManager, Graphics;
 
 type
+  TStringArray = array of string;
+
   TTransition = record
     SrcX, SrcY: Integer;
     DestMap: string;
@@ -27,7 +29,7 @@ type
     procedure CheckTransitions;
     procedure LoadLevelData(const Filename: string);
   public
-    constructor Create(ATileSize: Integer; const ResourceRoot: string);
+    constructor Create(ATileSize: Integer; const ResourceRoot, LevelsPath: string);
     destructor Destroy; override;
     procedure LoadLevel(const Filename: string);
     procedure Update(DeltaTime: Double);
@@ -40,19 +42,52 @@ type
 implementation
 
 uses
-  Math, LCLType, Dialogs;
+  Math;  // Убрали LCLType и Dialogs, если не используются
 
 const
   DIAGONAL_FACTOR = 0.7071067812;
+
+{ Вспомогательная функция SplitString }
+function SplitString(const S: string; Delimiter: Char): TStringArray;
+var
+  i, Start: Integer;
+begin
+  Result := nil;  // Инициализация для устранения предупреждения
+  SetLength(Result, 0);
+  Start := 1;
+  for i := 1 to Length(S) do
+  begin
+    if S[i] = Delimiter then
+    begin
+      if i > Start then
+      begin
+        SetLength(Result, Length(Result) + 1);
+        Result[High(Result)] := Copy(S, Start, i - Start);
+      end;
+      Start := i + 1;
+    end;
+  end;
+  if Start <= Length(S) then
+  begin
+    SetLength(Result, Length(Result) + 1);
+    Result[High(Result)] := Copy(S, Start, MaxInt);
+  end;
+end;
+
+{ TGameEngine }
 
 constructor TGameEngine.Create(ATileSize: Integer; const ResourceRoot, LevelsPath: string);
 begin
   FLevelsPath := LevelsPath;
   FResources := TResourceManager.Create(ATileSize, ResourceRoot);
   FMap := TMap.Create(ATileSize);
-  FPlayer := TPlayer.Create(ATileSize, 100); // скорость 100 пикс/сек
+  FPlayer := TPlayer.Create(ATileSize, 100);
   FSpeed := 100;
   FTransitions := nil;
+  FMoveLeft := False;
+  FMoveRight := False;
+  FMoveUp := False;
+  FMoveDown := False;
 end;
 
 destructor TGameEngine.Destroy;
@@ -133,7 +168,8 @@ end;
 procedure TGameEngine.LoadLevel(const Filename: string);
 begin
   LoadLevelData(FLevelsPath + Filename);
-  SetMoveFlags(False, False, False, False);
+  // Сбрасываем флаги движения после загрузки уровня
+  UpdateInput(False, False, False, False);  // Вместо SetMoveFlags
 end;
 
 procedure TGameEngine.Render(Canvas: TCanvas; DestRect: TRect);
@@ -180,32 +216,8 @@ var
   i, W, H, StartX, StartY: Integer;
   TileNames: TStringList;
   Line: string;
-  Tokens: array of string;
+  Tokens: TStringArray;
   Trans: TTransition;
-
-  function SplitString(const S: string; Delimiter: Char): TStringArray;
-  var
-    j, start: Integer;
-  begin
-    SetLength(Result, 0);
-    start := 1;
-    for j := 1 to Length(S) do
-      if S[j] = Delimiter then
-      begin
-        if j > start then
-        begin
-          SetLength(Result, Length(Result) + 1);
-          Result[High(Result)] := Copy(S, start, j - start);
-        end;
-        start := j + 1;
-      end;
-    if start <= Length(S) then
-    begin
-      SetLength(Result, Length(Result) + 1);
-      Result[High(Result)] := Copy(S, start, MaxInt);
-    end;
-  end;
-
 begin
   Lines := TStringList.Create;
   TileNames := TStringList.Create;
@@ -276,18 +288,18 @@ begin
       Tokens := SplitString(Line, ' ');
       if Length(Tokens) = 5 then
       begin
-        trans.SrcX := StrToInt(Tokens[0]);
-        trans.SrcY := StrToInt(Tokens[1]);
-        trans.DestMap := Tokens[2];
-        trans.DestX := StrToInt(Tokens[3]);
-        trans.DestY := StrToInt(Tokens[4]);
+        Trans.SrcX := StrToInt(Tokens[0]);
+        Trans.SrcY := StrToInt(Tokens[1]);
+        Trans.DestMap := Tokens[2];
+        Trans.DestX := StrToInt(Tokens[3]);
+        Trans.DestY := StrToInt(Tokens[4]);
         SetLength(FTransitions, Length(FTransitions) + 1);
-        FTransitions[High(FTransitions)] := trans;
+        FTransitions[High(FTransitions)] := Trans;
       end;
       Inc(i);
     end;
 
-    // Загрузка спрайтов игрока (один раз, можно вынести)
+    // Загрузка спрайтов игрока
     FResources.LoadPlayerSprites;
 
   finally
