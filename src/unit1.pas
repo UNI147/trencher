@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, LCLType,
-  Windows, GameEngine;
+  Windows, GameEngine, MMSystem;
 
 type
   TForm1 = class(TForm)
@@ -19,6 +19,7 @@ type
     FGameEngine: TGameEngine;
     FTimer: TTimer;
     FVirtualWidth, FVirtualHeight: Integer;
+    FJoystickAvailable: Boolean;
   public
   end;
 
@@ -38,6 +39,7 @@ const
 procedure TForm1.FormCreate(Sender: TObject);
 var
   LevelsPath: string;
+  ji: JOYINFO;   // для проверки джойстика
 begin
   KeyPreview := True;
   FVirtualWidth := VIRTUAL_WIDTH;
@@ -51,6 +53,9 @@ begin
   FTimer := TTimer.Create(Self);
   FTimer.Interval := 41; // ~24 FPS
   FTimer.OnTimer := @TimerTick;
+
+  // Проверяем, подключён ли джойстик
+  FJoystickAvailable := (joyGetPos(JOYSTICKID1, @ji) = JOYERR_NOERROR);
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -65,16 +70,63 @@ begin
 end;
 
 procedure TForm1.TimerTick(Sender: TObject);
+var
+  ji: JOYINFO;
+  keyLeft, keyRight, keyUpPressed, keyDownPressed: Boolean;
+  joyLeft, joyRight, joyUp, joyDown: Boolean;
+  startPressed: Boolean;
+const
+  DEADZONE = 10000;
+  JOY_BUTTON_START = $0200;  // Кнопка 10 (Start)
 begin
-  // Обновляем состояние ввода напрямую из таймера
+  // --- Ввод с клавиатуры ---
+  keyLeft   := (GetKeyState(VK_LEFT) and $8000) <> 0;
+  keyRight  := (GetKeyState(VK_RIGHT) and $8000) <> 0;
+  keyUpPressed := (GetKeyState(VK_UP) and $8000) <> 0;
+  keyDownPressed := (GetKeyState(VK_DOWN) and $8000) <> 0;
+
+  // --- Ввод с джойстика (если доступен) ---
+  joyLeft := False; joyRight := False; joyUp := False; joyDown := False;
+  startPressed := False;
+
+  if FJoystickAvailable then
+  begin
+    if joyGetPos(JOYSTICKID1, @ji) = JOYERR_NOERROR then
+    begin
+      // Оси X и Y
+      if ji.wXpos < 32768 - DEADZONE then
+        joyLeft := True
+      else if ji.wXpos > 32768 + DEADZONE then
+        joyRight := True;
+
+      if ji.wYpos < 32768 - DEADZONE then
+        joyUp := True
+      else if ji.wYpos > 32768 + DEADZONE then
+        joyDown := True;
+
+      // Проверка кнопки Start
+      startPressed := (ji.wButtons and JOY_BUTTON_START) <> 0;
+    end
+    else
+      FJoystickAvailable := False;
+  end;
+
+  // --- Выход по кнопке Start на геймпаде ---
+  if startPressed then
+  begin
+    Close;
+    Exit;  // Выходим из процедуры, чтобы не обновлять игру
+  end;
+
+  // --- Объединяем команды (клавиатура ИЛИ джойстик) ---
   FGameEngine.UpdateInput(
-    (GetKeyState(VK_LEFT) and $8000) <> 0,
-    (GetKeyState(VK_RIGHT) and $8000) <> 0,
-    (GetKeyState(VK_UP) and $8000) <> 0,
-    (GetKeyState(VK_DOWN) and $8000) <> 0
+    keyLeft   or joyLeft,
+    keyRight  or joyRight,
+    keyUpPressed or joyUp,
+    keyDownPressed or joyDown
   );
 
-  // Обновляем состояние игры
+  // --- Обновление игры и перерисовка ---
   FGameEngine.Update(FTimer.Interval / 1000.0);
   Invalidate;
 end;
