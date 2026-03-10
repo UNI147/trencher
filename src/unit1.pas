@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, LCLType,
-  Windows, GameEngine, MMSystem;
+  Windows, GameEngine, MMSystem, Logger;
 
 type
   TForm1 = class(TForm)
@@ -36,37 +36,76 @@ const
   TILE_SIZE = 20;
   RESOURCES_ROOT = '..\resources\';
 
+procedure CheckMCIDrivers;
+var
+  ReturnStr: string;
+  Cmd: string;
+begin
+  Cmd := 'sysinfo all quantity';
+  if mciSendString(PChar(Cmd), nil, 0, 0) = 0 then
+    LogDebug('MCI system available');
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 var
   LevelsPath: string;
-  ji: JOYINFO;   // для проверки джойстика
+  ji: JOYINFO;
+  MusicPath, WindPath, StepPath: string;
+  AppPath: string;
 begin
+  AppPath := ExtractFilePath(ParamStr(0));
+  LogDebug('Application started');
+  LogDebug('Application path: ' + AppPath);
+
+  // Проверка MCI
+  CheckMCIDrivers;
+
   KeyPreview := True;
   FVirtualWidth := VIRTUAL_WIDTH;
   FVirtualHeight := VIRTUAL_HEIGHT;
 
-  LevelsPath := ExtractFilePath(ParamStr(0)) + RESOURCES_ROOT + 'levels\';
+  LevelsPath := AppPath + RESOURCES_ROOT + 'levels\';
+  LogDebug('Levels path: ' + LevelsPath);
 
   FGameEngine := TGameEngine.Create(TILE_SIZE, RESOURCES_ROOT, LevelsPath);
-  FGameEngine.LoadLevel('level.txt');  // имя файла
+  FGameEngine.LoadLevel('level.txt');
+  LogDebug('Level loaded');
 
   FTimer := TTimer.Create(Self);
-  FTimer.Interval := 41; // ~24 FPS
+  FTimer.Interval := 41;
   FTimer.OnTimer := @TimerTick;
 
-  // Проверяем, подключён ли джойстик
+  // Проверяем джойстик
   FJoystickAvailable := (joyGetPos(JOYSTICKID1, @ji) = JOYERR_NOERROR);
+  LogDebug('Joystick available: ' + BoolToStr(FJoystickAvailable, True));
+
+  // Проверяем звуковые файлы
+  MusicPath := AppPath + RESOURCES_ROOT + 'music\JRRTLotRV1.wav';
+  WindPath  := AppPath + RESOURCES_ROOT + 'effects\wind.wav';
+  StepPath  := AppPath + RESOURCES_ROOT + 'effects\step.wav';
+
+  LogDebug('Checking sound files:');
+  LogDebug('  Music: ' + MusicPath + ' - ' + BoolToStr(FileExists(MusicPath), True));
+  LogDebug('  Wind: ' + WindPath + ' - ' + BoolToStr(FileExists(WindPath), True));
+  LogDebug('  Step: ' + StepPath + ' - ' + BoolToStr(FileExists(StepPath), True));
+
+  FGameEngine.InitSounds(MusicPath, WindPath, StepPath);
+  LogDebug('Sound initialization completed');
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
+  LogDebug('Application shutting down');
   FGameEngine.Free;
 end;
 
 procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Key = VK_ESCAPE then
+  begin
+    LogDebug('ESC pressed - closing application');
     Close;
+  end;
 end;
 
 procedure TForm1.TimerTick(Sender: TObject);
@@ -77,15 +116,13 @@ var
   startPressed: Boolean;
 const
   DEADZONE = 10000;
-  JOY_BUTTON_START = $0200;  // Кнопка 10 (Start)
+  JOY_BUTTON_START = $0200;
 begin
-  // --- Ввод с клавиатуры ---
   keyLeft   := (GetKeyState(VK_LEFT) and $8000) <> 0;
   keyRight  := (GetKeyState(VK_RIGHT) and $8000) <> 0;
   keyUpPressed := (GetKeyState(VK_UP) and $8000) <> 0;
   keyDownPressed := (GetKeyState(VK_DOWN) and $8000) <> 0;
 
-  // --- Ввод с джойстика (если доступен) ---
   joyLeft := False; joyRight := False; joyUp := False; joyDown := False;
   startPressed := False;
 
@@ -93,7 +130,6 @@ begin
   begin
     if joyGetPos(JOYSTICKID1, @ji) = JOYERR_NOERROR then
     begin
-      // Оси X и Y
       if ji.wXpos < 32768 - DEADZONE then
         joyLeft := True
       else if ji.wXpos > 32768 + DEADZONE then
@@ -104,21 +140,19 @@ begin
       else if ji.wYpos > 32768 + DEADZONE then
         joyDown := True;
 
-      // Проверка кнопки Start
       startPressed := (ji.wButtons and JOY_BUTTON_START) <> 0;
     end
     else
       FJoystickAvailable := False;
   end;
 
-  // --- Выход по кнопке Start на геймпаде ---
   if startPressed then
   begin
+    LogDebug('Start button pressed - closing application');
     Close;
-    Exit;  // Выходим из процедуры, чтобы не обновлять игру
+    Exit;
   end;
 
-  // --- Объединяем команды (клавиатура ИЛИ джойстик) ---
   FGameEngine.UpdateInput(
     keyLeft   or joyLeft,
     keyRight  or joyRight,
@@ -126,7 +160,6 @@ begin
     keyDownPressed or joyDown
   );
 
-  // --- Обновление игры и перерисовка ---
   FGameEngine.Update(FTimer.Interval / 1000.0);
   Invalidate;
 end;
@@ -137,11 +170,9 @@ var
   DestWidth, DestHeight: Integer;
   DestRect: TRect;
 begin
-  // Очистка формы
   Canvas.Brush.Color := clBlack;
   Canvas.FillRect(ClientRect);
 
-  // Расчет масштаба
   if ClientWidth / FVirtualWidth < ClientHeight / FVirtualHeight then
     Scale := ClientWidth / FVirtualWidth
   else
@@ -155,7 +186,6 @@ begin
     DestWidth, DestHeight
   );
 
-  // Рендеринг игры
   SetStretchBltMode(Canvas.Handle, STRETCH_DELETESCANS);
   FGameEngine.Render(Canvas, DestRect);
 end;

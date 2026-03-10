@@ -1,0 +1,431 @@
+=== Game Debug Log ===
+Start time: 10.03.2026 16:10:52
+Working directory: C:\trencher\src\
+
+[16:10:52.072] DEBUG: Application started
+[16:10:52.073] DEBUG: Application path: C:\trencher\src\
+[16:10:52.074] DEBUG: Levels path: C:\trencher\src\..\resources\levels\
+[16:10:52.075] DEBUG: TGameEngine.Create started
+[16:10:52.076] DEBUG: TResourceManager.Create: TileSize=20, Root=..\resources\
+[16:10:52.077] DEBUG: Loading player sprites
+[16:10:52.077] DEBUG:   Loading player sprite 0 from: C:\trencher\src\..\resources\sprites\player0.png
+[16:10:52.079] DEBUG:   Player sprite 0 loaded successfully
+[16:10:52.080] DEBUG:   Loading player sprite 1 from: C:\trencher\src\..\resources\sprites\player1.png
+[16:10:52.081] DEBUG:   Player sprite 1 loaded successfully
+[16:10:52.082] DEBUG:   Loading player sprite 2 from: C:\trencher\src\..\resources\sprites\player2.png
+[16:10:52.084] DEBUG:   Player sprite 2 loaded successfully
+[16:10:52.085] DEBUG: Player sprites loading completed
+[16:10:52.085] SOUND: TSoundManager.Create (API version)
+[16:10:52.086] DEBUG: TGameEngine.Create completed
+[16:10:52.087] DEBUG: Loading level: level.txt
+[16:10:52.088] DEBUG: Loading 3 tiles
+[16:10:52.090] DEBUG: Added sprite at index 0
+[16:10:52.091] DEBUG: Added sprite at index 1
+[16:10:52.093] DEBUG: Added sprite at index 2
+[16:10:52.095] DEBUG: Added sprite at index 3
+[16:10:52.097] DEBUG: Added sprite at index 4
+[16:10:52.098] DEBUG: Added sprite at index 5
+[16:10:52.100] DEBUG: Level loaded. Start position: (0, 0)
+[16:10:52.101] DEBUG: Level loaded
+[16:10:52.276] DEBUG: Joystick available: True
+[16:10:52.277] DEBUG: Checking sound files:
+[16:10:52.278] DEBUG:   Music: C:\trencher\src\..\resources\music\JRRTLotRV1.wav - True
+[16:10:52.279] DEBUG:   Wind: C:\trencher\src\..\resources\effects\wind.wav - True
+[16:10:52.280] DEBUG:   Step: C:\trencher\src\..\resources\effects\step.wav - True
+[16:10:52.280] SOUND: Initializing sounds...
+[16:10:52.281] SOUND:   Music: C:\trencher\src\..\resources\music\JRRTLotRV1.wav
+[16:10:52.282] SOUND:   Wind: C:\trencher\src\..\resources\effects\wind.wav
+[16:10:52.283] SOUND:   Step: C:\trencher\src\..\resources\effects\step.wav
+[16:10:52.284] SOUND: Music file exists, playing...
+[16:10:52.285] SOUND: PlayMusic called: C:\trencher\src\..\resources\music\JRRTLotRV1.wav
+[16:10:52.976] SOUND: Music started successfully
+[16:10:52.977] SOUND: Wind file exists, playing...
+[16:10:52.979] SOUND: PlayWind called: C:\trencher\src\..\resources\effects\wind.wav
+[16:10:53.456] SOUND: Wind started successfully (MCI)
+[16:10:53.458] DEBUG: Sound initialization completed
+[16:10:56.091] DEBUG: Movement started - playing step sound
+[16:10:56.093] SOUND: StartMovingSounds called
+[16:10:56.095] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:10:56.096] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:10:56.468] DEBUG: Movement stopped - stopping step sound
+[16:10:56.470] SOUND: StopMovingSounds called
+[16:10:57.029] DEBUG: Movement started - playing step sound
+[16:10:57.031] SOUND: StartMovingSounds called
+[16:10:57.033] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:10:57.034] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:10:59.878] DEBUG: Movement stopped - stopping step sound
+[16:10:59.880] SOUND: StopMovingSounds called
+[16:10:59.924] DEBUG: Movement started - playing step sound
+[16:10:59.926] SOUND: StartMovingSounds called
+[16:10:59.928] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:10:59.930] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:00.065] DEBUG: Movement stopped - stopping step sound
+[16:11:00.066] SOUND: StopMovingSounds called
+[16:11:00.219] DEBUG: Movement started - playing step sound
+[16:11:00.221] SOUND: StartMovingSounds called
+[16:11:00.222] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:00.223] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:00.547] DEBUG: Movement stopped - stopping step sound
+[16:11:00.550] SOUND: StopMovingSounds called
+[16:11:00.919] DEBUG: Movement started - playing step sound
+[16:11:00.921] SOUND: StartMovingSounds called
+[16:11:00.923] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:00.924] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:01.106] DEBUG: Movement stopped - stopping step sound
+[16:11:01.108] SOUND: StopMovingSounds called
+[16:11:01.386] DEBUG: Movement started - playing step sound
+[16:11:01.388] SOUND: StartMovingSounds called
+[16:11:01.391] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:01.392] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:04.051] DEBUG: Transition triggered at (15, 9)
+[16:11:04.053] DEBUG:   Dest: level2.txt at (0, 0)
+[16:11:04.055] DEBUG: Loading level: level2.txt
+[16:11:04.057] DEBUG: Loading 3 tiles
+[16:11:04.061] DEBUG: Added sprite at index 6
+[16:11:04.063] DEBUG: Added sprite at index 7
+[16:11:04.065] DEBUG: Added sprite at index 8
+[16:11:04.068] DEBUG: Added sprite at index 9
+[16:11:04.070] DEBUG: Added sprite at index 10
+[16:11:04.073] DEBUG: Added sprite at index 11
+[16:11:04.076] DEBUG: Added sprite at index 12
+[16:11:04.078] DEBUG: Added sprite at index 13
+[16:11:04.082] DEBUG: Added sprite at index 14
+[16:11:04.084] DEBUG: Added sprite at index 15
+[16:11:04.087] DEBUG: Added sprite at index 16
+[16:11:04.090] DEBUG: Added sprite at index 17
+[16:11:04.092] DEBUG: Added sprite at index 18
+[16:11:04.095] DEBUG: Added sprite at index 19
+[16:11:04.097] DEBUG: Added sprite at index 20
+[16:11:04.100] DEBUG: Added sprite at index 21
+[16:11:04.102] DEBUG: Added sprite at index 22
+[16:11:04.103] DEBUG: Level loaded. Start position: (0, 0)
+[16:11:04.123] DEBUG: Movement stopped - stopping step sound
+[16:11:04.125] SOUND: StopMovingSounds called
+[16:11:05.324] DEBUG: Movement started - playing step sound
+[16:11:05.327] SOUND: StartMovingSounds called
+[16:11:05.330] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:05.332] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:06.822] DEBUG: Movement stopped - stopping step sound
+[16:11:06.824] SOUND: StopMovingSounds called
+[16:11:06.868] DEBUG: Movement started - playing step sound
+[16:11:06.869] SOUND: StartMovingSounds called
+[16:11:06.871] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:06.872] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:07.710] DEBUG: Movement stopped - stopping step sound
+[16:11:07.713] SOUND: StopMovingSounds called
+[16:11:07.897] DEBUG: Movement started - playing step sound
+[16:11:07.899] SOUND: StartMovingSounds called
+[16:11:07.901] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:07.903] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:07.945] DEBUG: Movement stopped - stopping step sound
+[16:11:07.947] SOUND: StopMovingSounds called
+[16:11:08.237] DEBUG: Movement started - playing step sound
+[16:11:08.239] SOUND: StartMovingSounds called
+[16:11:08.241] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:08.242] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:08.330] DEBUG: Movement stopped - stopping step sound
+[16:11:08.332] SOUND: StopMovingSounds called
+[16:11:08.796] DEBUG: Movement started - playing step sound
+[16:11:08.798] SOUND: StartMovingSounds called
+[16:11:08.801] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:08.803] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:08.842] DEBUG: Movement stopped - stopping step sound
+[16:11:08.845] SOUND: StopMovingSounds called
+[16:11:12.513] SOUND: Wind restarted by timer
+[16:11:14.826] DEBUG: Movement started - playing step sound
+[16:11:14.830] SOUND: StartMovingSounds called
+[16:11:14.833] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:14.835] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:15.909] DEBUG: Movement stopped - stopping step sound
+[16:11:15.914] SOUND: StopMovingSounds called
+[16:11:16.610] DEBUG: Movement started - playing step sound
+[16:11:16.615] SOUND: StartMovingSounds called
+[16:11:16.617] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:16.619] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:18.055] DEBUG: Transition triggered at (15, 9)
+[16:11:18.058] DEBUG:   Dest: level.txt at (0, 0)
+[16:11:18.060] DEBUG: Loading level: level.txt
+[16:11:18.065] DEBUG: Loading 3 tiles
+[16:11:18.068] DEBUG: Added sprite at index 23
+[16:11:18.070] DEBUG: Added sprite at index 24
+[16:11:18.081] DEBUG: Added sprite at index 25
+[16:11:18.084] DEBUG: Added sprite at index 26
+[16:11:18.088] DEBUG: Added sprite at index 27
+[16:11:18.090] DEBUG: Added sprite at index 28
+[16:11:18.092] DEBUG: Level loaded. Start position: (0, 0)
+[16:11:18.110] DEBUG: Movement stopped - stopping step sound
+[16:11:18.114] SOUND: StopMovingSounds called
+[16:11:18.863] DEBUG: Movement started - playing step sound
+[16:11:18.868] SOUND: StartMovingSounds called
+[16:11:18.871] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:18.874] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:20.546] DEBUG: Movement stopped - stopping step sound
+[16:11:20.550] SOUND: StopMovingSounds called
+[16:11:20.874] DEBUG: Movement started - playing step sound
+[16:11:20.877] SOUND: StartMovingSounds called
+[16:11:20.879] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:20.882] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:20.967] DEBUG: Movement stopped - stopping step sound
+[16:11:20.969] SOUND: StopMovingSounds called
+[16:11:31.508] SOUND: Wind restarted by timer
+[16:11:50.536] SOUND: Wind restarted by timer
+[16:11:53.063] DEBUG: Movement started - playing step sound
+[16:11:53.065] SOUND: StartMovingSounds called
+[16:11:53.067] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:53.070] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:53.340] DEBUG: Movement stopped - stopping step sound
+[16:11:53.344] SOUND: StopMovingSounds called
+[16:11:53.575] DEBUG: Movement started - playing step sound
+[16:11:53.577] SOUND: StartMovingSounds called
+[16:11:53.579] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:53.581] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:53.775] DEBUG: Movement stopped - stopping step sound
+[16:11:53.778] SOUND: StopMovingSounds called
+[16:11:53.977] DEBUG: Movement started - playing step sound
+[16:11:53.980] SOUND: StartMovingSounds called
+[16:11:53.983] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:53.985] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:54.117] DEBUG: Movement stopped - stopping step sound
+[16:11:54.121] SOUND: StopMovingSounds called
+[16:11:54.539] DEBUG: Movement started - playing step sound
+[16:11:54.543] SOUND: StartMovingSounds called
+[16:11:54.546] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:54.549] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:56.978] DEBUG: Movement stopped - stopping step sound
+[16:11:56.980] SOUND: StopMovingSounds called
+[16:11:57.197] DEBUG: Movement started - playing step sound
+[16:11:57.200] SOUND: StartMovingSounds called
+[16:11:57.203] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:57.205] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:11:57.415] DEBUG: Movement stopped - stopping step sound
+[16:11:57.418] SOUND: StopMovingSounds called
+[16:11:58.443] DEBUG: Movement started - playing step sound
+[16:11:58.447] SOUND: StartMovingSounds called
+[16:11:58.450] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:11:58.454] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:00.555] DEBUG: Transition triggered at (15, 9)
+[16:12:00.558] DEBUG:   Dest: level2.txt at (0, 0)
+[16:12:00.561] DEBUG: Loading level: level2.txt
+[16:12:00.564] DEBUG: Loading 3 tiles
+[16:12:00.568] DEBUG: Added sprite at index 29
+[16:12:00.571] DEBUG: Added sprite at index 30
+[16:12:00.574] DEBUG: Added sprite at index 31
+[16:12:00.578] DEBUG: Added sprite at index 32
+[16:12:00.581] DEBUG: Added sprite at index 33
+[16:12:00.585] DEBUG: Added sprite at index 34
+[16:12:00.589] DEBUG: Added sprite at index 35
+[16:12:00.593] DEBUG: Added sprite at index 36
+[16:12:00.596] DEBUG: Added sprite at index 37
+[16:12:00.600] DEBUG: Added sprite at index 38
+[16:12:00.603] DEBUG: Added sprite at index 39
+[16:12:00.606] DEBUG: Added sprite at index 40
+[16:12:00.610] DEBUG: Added sprite at index 41
+[16:12:00.614] DEBUG: Added sprite at index 42
+[16:12:00.618] DEBUG: Added sprite at index 43
+[16:12:00.621] DEBUG: Added sprite at index 44
+[16:12:00.623] DEBUG: Added sprite at index 45
+[16:12:00.626] DEBUG: Level loaded. Start position: (0, 0)
+[16:12:00.646] DEBUG: Movement stopped - stopping step sound
+[16:12:00.649] SOUND: StopMovingSounds called
+[16:12:01.490] DEBUG: Movement started - playing step sound
+[16:12:01.494] SOUND: StartMovingSounds called
+[16:12:01.497] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:01.501] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:04.348] DEBUG: Movement stopped - stopping step sound
+[16:12:04.350] SOUND: StopMovingSounds called
+[16:12:05.142] DEBUG: Movement started - playing step sound
+[16:12:05.145] SOUND: StartMovingSounds called
+[16:12:05.148] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:05.151] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:06.693] DEBUG: Transition triggered at (15, 9)
+[16:12:06.696] DEBUG:   Dest: level.txt at (0, 0)
+[16:12:06.699] DEBUG: Loading level: level.txt
+[16:12:06.702] DEBUG: Loading 3 tiles
+[16:12:06.706] DEBUG: Added sprite at index 46
+[16:12:06.710] DEBUG: Added sprite at index 47
+[16:12:06.713] DEBUG: Added sprite at index 48
+[16:12:06.716] DEBUG: Added sprite at index 49
+[16:12:06.720] DEBUG: Added sprite at index 50
+[16:12:06.723] DEBUG: Added sprite at index 51
+[16:12:06.725] DEBUG: Level loaded. Start position: (0, 0)
+[16:12:06.833] DEBUG: Movement stopped - stopping step sound
+[16:12:06.836] SOUND: StopMovingSounds called
+[16:12:07.858] DEBUG: Movement started - playing step sound
+[16:12:07.861] SOUND: StartMovingSounds called
+[16:12:07.865] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:07.868] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:08.991] DEBUG: Movement stopped - stopping step sound
+[16:12:08.995] SOUND: StopMovingSounds called
+[16:12:09.177] DEBUG: Movement started - playing step sound
+[16:12:09.181] SOUND: StartMovingSounds called
+[16:12:09.184] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:09.187] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:09.367] DEBUG: Movement stopped - stopping step sound
+[16:12:09.370] SOUND: StopMovingSounds called
+[16:12:09.563] SOUND: Wind restarted by timer
+[16:12:09.881] DEBUG: Movement started - playing step sound
+[16:12:09.884] SOUND: StartMovingSounds called
+[16:12:09.887] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:09.890] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:09.976] DEBUG: Movement stopped - stopping step sound
+[16:12:09.980] SOUND: StopMovingSounds called
+[16:12:11.471] DEBUG: Movement started - playing step sound
+[16:12:11.475] SOUND: StartMovingSounds called
+[16:12:11.478] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:11.481] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:11.517] DEBUG: Movement stopped - stopping step sound
+[16:12:11.521] SOUND: StopMovingSounds called
+[16:12:12.451] DEBUG: Movement started - playing step sound
+[16:12:12.454] SOUND: StartMovingSounds called
+[16:12:12.459] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:12.462] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:12.791] DEBUG: Movement stopped - stopping step sound
+[16:12:12.796] SOUND: StopMovingSounds called
+[16:12:15.370] DEBUG: Movement started - playing step sound
+[16:12:15.378] SOUND: StartMovingSounds called
+[16:12:15.383] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:15.386] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:15.416] DEBUG: Movement stopped - stopping step sound
+[16:12:15.420] SOUND: StopMovingSounds called
+[16:12:28.559] SOUND: Wind restarted by timer
+[16:12:38.114] DEBUG: Movement started - playing step sound
+[16:12:38.117] SOUND: StartMovingSounds called
+[16:12:38.120] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:38.123] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:38.486] DEBUG: Movement stopped - stopping step sound
+[16:12:38.489] SOUND: StopMovingSounds called
+[16:12:39.524] DEBUG: Movement started - playing step sound
+[16:12:39.528] SOUND: StartMovingSounds called
+[16:12:39.532] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:39.535] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:39.617] DEBUG: Movement stopped - stopping step sound
+[16:12:39.621] SOUND: StopMovingSounds called
+[16:12:39.758] DEBUG: Movement started - playing step sound
+[16:12:39.765] SOUND: StartMovingSounds called
+[16:12:39.768] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:39.771] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:40.134] DEBUG: Movement stopped - stopping step sound
+[16:12:40.138] SOUND: StopMovingSounds called
+[16:12:40.835] DEBUG: Movement started - playing step sound
+[16:12:40.840] SOUND: StartMovingSounds called
+[16:12:40.845] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:40.849] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:43.548] DEBUG: Movement stopped - stopping step sound
+[16:12:43.551] SOUND: StopMovingSounds called
+[16:12:43.858] DEBUG: Movement started - playing step sound
+[16:12:43.861] SOUND: StartMovingSounds called
+[16:12:43.867] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:43.869] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:44.044] DEBUG: Movement stopped - stopping step sound
+[16:12:44.049] SOUND: StopMovingSounds called
+[16:12:44.324] DEBUG: Movement started - playing step sound
+[16:12:44.327] SOUND: StartMovingSounds called
+[16:12:44.332] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:44.335] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:44.417] DEBUG: Movement stopped - stopping step sound
+[16:12:44.421] SOUND: StopMovingSounds called
+[16:12:44.650] DEBUG: Movement started - playing step sound
+[16:12:44.654] SOUND: StartMovingSounds called
+[16:12:44.657] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:44.660] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:47.041] DEBUG: Movement stopped - stopping step sound
+[16:12:47.043] SOUND: StopMovingSounds called
+[16:12:47.565] SOUND: Wind restarted by timer
+[16:12:47.603] DEBUG: Movement started - playing step sound
+[16:12:47.607] SOUND: StartMovingSounds called
+[16:12:47.610] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:47.615] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:47.976] DEBUG: Movement stopped - stopping step sound
+[16:12:47.982] SOUND: StopMovingSounds called
+[16:12:48.772] DEBUG: Movement started - playing step sound
+[16:12:48.775] SOUND: StartMovingSounds called
+[16:12:48.779] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:48.783] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:52.442] DEBUG: Movement stopped - stopping step sound
+[16:12:52.447] SOUND: StopMovingSounds called
+[16:12:52.583] DEBUG: Movement started - playing step sound
+[16:12:52.587] SOUND: StartMovingSounds called
+[16:12:52.592] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:52.595] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:53.782] DEBUG: Transition triggered at (15, 9)
+[16:12:53.788] DEBUG:   Dest: level2.txt at (0, 0)
+[16:12:53.791] DEBUG: Loading level: level2.txt
+[16:12:53.795] DEBUG: Loading 3 tiles
+[16:12:53.801] DEBUG: Added sprite at index 52
+[16:12:53.805] DEBUG: Added sprite at index 53
+[16:12:53.809] DEBUG: Added sprite at index 54
+[16:12:53.815] DEBUG: Added sprite at index 55
+[16:12:53.821] DEBUG: Added sprite at index 56
+[16:12:53.825] DEBUG: Added sprite at index 57
+[16:12:53.829] DEBUG: Added sprite at index 58
+[16:12:53.834] DEBUG: Added sprite at index 59
+[16:12:53.839] DEBUG: Added sprite at index 60
+[16:12:53.846] DEBUG: Added sprite at index 61
+[16:12:53.850] DEBUG: Added sprite at index 62
+[16:12:53.854] DEBUG: Added sprite at index 63
+[16:12:53.860] DEBUG: Added sprite at index 64
+[16:12:53.866] DEBUG: Added sprite at index 65
+[16:12:53.872] DEBUG: Added sprite at index 66
+[16:12:53.876] DEBUG: Added sprite at index 67
+[16:12:53.881] DEBUG: Added sprite at index 68
+[16:12:53.885] DEBUG: Level loaded. Start position: (0, 0)
+[16:12:53.966] DEBUG: Movement stopped - stopping step sound
+[16:12:53.976] SOUND: StopMovingSounds called
+[16:12:54.948] DEBUG: Movement started - playing step sound
+[16:12:54.953] SOUND: StartMovingSounds called
+[16:12:54.957] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:54.961] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:56.549] DEBUG: Movement stopped - stopping step sound
+[16:12:56.554] SOUND: StopMovingSounds called
+[16:12:58.989] DEBUG: Movement started - playing step sound
+[16:12:58.993] SOUND: StartMovingSounds called
+[16:12:58.996] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:59.000] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:12:59.600] DEBUG: Movement stopped - stopping step sound
+[16:12:59.604] SOUND: StopMovingSounds called
+[16:12:59.926] DEBUG: Movement started - playing step sound
+[16:12:59.931] SOUND: StartMovingSounds called
+[16:12:59.935] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:12:59.940] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:13:00.082] DEBUG: Movement stopped - stopping step sound
+[16:13:00.086] SOUND: StopMovingSounds called
+[16:13:00.410] DEBUG: Movement started - playing step sound
+[16:13:00.414] SOUND: StartMovingSounds called
+[16:13:00.418] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:13:00.421] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:13:00.472] DEBUG: Movement stopped - stopping step sound
+[16:13:00.475] SOUND: StopMovingSounds called
+[16:13:01.002] DEBUG: Movement started - playing step sound
+[16:13:01.008] SOUND: StartMovingSounds called
+[16:13:01.013] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:13:01.018] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:13:01.096] DEBUG: Movement stopped - stopping step sound
+[16:13:01.101] SOUND: StopMovingSounds called
+[16:13:06.593] SOUND: Wind restarted by timer
+[16:13:12.103] SOUND: Music restarted by timer
+[16:13:13.745] DEBUG: Movement started - playing step sound
+[16:13:13.750] SOUND: StartMovingSounds called
+[16:13:13.754] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:13:13.757] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:13:16.465] DEBUG: Transition triggered at (15, 9)
+[16:13:16.473] DEBUG:   Dest: level.txt at (0, 0)
+[16:13:16.476] DEBUG: Loading level: level.txt
+[16:13:16.480] DEBUG: Loading 3 tiles
+[16:13:16.485] DEBUG: Added sprite at index 69
+[16:13:16.489] DEBUG: Added sprite at index 70
+[16:13:16.493] DEBUG: Added sprite at index 71
+[16:13:16.498] DEBUG: Added sprite at index 72
+[16:13:16.503] DEBUG: Added sprite at index 73
+[16:13:16.507] DEBUG: Added sprite at index 74
+[16:13:16.511] DEBUG: Level loaded. Start position: (0, 0)
+[16:13:16.652] DEBUG: Movement stopped - stopping step sound
+[16:13:16.656] SOUND: StopMovingSounds called
+[16:13:17.410] DEBUG: Movement started - playing step sound
+[16:13:17.414] SOUND: StartMovingSounds called
+[16:13:17.418] SOUND: Playing step sound: C:\trencher\src\..\resources\effects\step.wav
+[16:13:17.422] SOUND: PlayStep called: C:\trencher\src\..\resources\effects\step.wav
+[16:13:18.061] DEBUG: Movement stopped - stopping step sound
+[16:13:18.065] SOUND: StopMovingSounds called
+[16:13:18.902] DEBUG: ESC pressed - closing application
+
+=== Log closed at 10.03.2026 16:13:18 ===

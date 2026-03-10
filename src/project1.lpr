@@ -22,7 +22,9 @@ uses
   SpriteSet,
   AnimationController,
   SpriteDescriptionParser,
-  PathResolver
+  PathResolver,
+  SoundManager,
+  Logger
   { you can add units after this };
 
 {$R *.res}

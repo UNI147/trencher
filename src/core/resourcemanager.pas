@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, Graphics, SysUtils,
-  PathResolver, TileSet, SpriteSet, SpriteDescriptionParser;
+  PathResolver, TileSet, SpriteSet, SpriteDescriptionParser, Logger;  // Добавлен Logger
 
 type
   TResourceManager = class
@@ -23,31 +23,25 @@ type
     constructor Create(ATileSize: Integer; const ARoot: string);
     destructor Destroy; override;
 
-    // Загрузка ресурсов
     procedure LoadTiles(const TileNames: TStrings);
     procedure LoadPlayerSprites;
     procedure LoadSpritesFromDescriptions(const Descriptions: TStrings);
 
-    // Анимация
     procedure UpdateAnimation(DeltaTime: Double);
 
-    // Доступ к тайлам
     function GetTileImage(Index: Integer): TBitmap;
     function IsTileSolid(Index: Integer): Boolean;
     property TileSet: TTileSet read FTileSet;
     property TileSize: Integer read FTileSize;
 
-    // Доступ к спрайтам
     function GetSpriteImage(Index: Integer): TBitmap;
     function GetSpriteHeight(Index: Integer): Integer;
     function IsSpriteSolid(Index: Integer): Boolean;
     function IsSpriteBehind(Index: Integer): Boolean;
     property SpriteSet: TSpriteSet read FSpriteSet;
 
-    // Доступ к игроку
     function GetPlayerSprite(Index: Integer): TBitmap;
 
-    // Добавление спрайтов "на лету"
     function AddSprite(const FileNames: array of string; IsSolid, IsBehind: Boolean): Integer;
   end;
 
@@ -55,6 +49,7 @@ implementation
 
 constructor TResourceManager.Create(ATileSize: Integer; const ARoot: string);
 begin
+  LogDebug('TResourceManager.Create: TileSize=' + IntToStr(ATileSize) + ', Root=' + ARoot);
   FTileSize := ATileSize;
   FPathResolver := TResourcePathResolver.Create(ARoot);
   FTileSet := TTileSet.Create(ATileSize, FPathResolver);
@@ -63,13 +58,14 @@ begin
   SetLength(FPlayerSprites, 3);
   FAnimFrame := 0;
   FAnimTime := 0;
-  FAnimInterval := 0.2; // 200 ms между кадрами
+  FAnimInterval := 0.2;
 end;
 
 destructor TResourceManager.Destroy;
 var
   i: Integer;
 begin
+  LogDebug('TResourceManager.Destroy');
   for i := 0 to High(FPlayerSprites) do
     FPlayerSprites[i].Free;
 
@@ -80,6 +76,7 @@ end;
 
 procedure TResourceManager.LoadTiles(const TileNames: TStrings);
 begin
+  LogDebug('Loading ' + IntToStr(TileNames.Count) + ' tiles');
   FTileSet.LoadFromStrings(TileNames);
 end;
 
@@ -89,6 +86,7 @@ var
   Png: TPortableNetworkGraphic;
   Path: string;
 begin
+  LogDebug('Loading player sprites');
   for i := 0 to 2 do
   begin
     FPlayerSprites[i] := TBitmap.Create;
@@ -96,14 +94,18 @@ begin
     Png := TPortableNetworkGraphic.Create;
     try
       Path := FPathResolver.GetFullPath('sprites', Format('player%d.png', [i]));
+      LogDebug('  Loading player sprite ' + IntToStr(i) + ' from: ' + Path);
+
       if FileExists(Path) then
       begin
         Png.LoadFromFile(Path);
         FPlayerSprites[i].SetSize(FTileSize, FTileSize);
         FPlayerSprites[i].Canvas.Draw(0, 0, Png);
+        LogDebug('  Player sprite ' + IntToStr(i) + ' loaded successfully');
       end
       else
       begin
+        LogError('  Player sprite file not found: ' + Path);
         FPlayerSprites[i].SetSize(FTileSize, FTileSize);
         FPlayerSprites[i].Canvas.Brush.Color := clRed;
         FPlayerSprites[i].Canvas.FillRect(0, 0, FTileSize, FTileSize);
@@ -112,6 +114,7 @@ begin
       Png.Free;
     end;
   end;
+  LogDebug('Player sprites loading completed');
 end;
 
 procedure TResourceManager.LoadSpritesFromDescriptions(const Descriptions: TStrings);
@@ -120,10 +123,12 @@ var
   FileNames: TStringArray;
   IsSolid, IsBehind: Boolean;
 begin
+  LogDebug('Loading sprites from ' + IntToStr(Descriptions.Count) + ' descriptions');
   for i := 0 to Descriptions.Count - 1 do
   begin
     TSpriteDescriptionParser.Parse(Descriptions[i], FileNames, IsSolid, IsBehind);
     FSpriteSet.AddSprite(FileNames, IsSolid, IsBehind);
+    LogDebug('  Added sprite with ' + IntToStr(Length(FileNames)) + ' frames');
   end;
 end;
 
@@ -180,7 +185,7 @@ begin
     Result := Sprite.IsBehind;
   end
   else
-    Result := True; // по умолчанию за игроком
+    Result := True;
 end;
 
 function TResourceManager.GetPlayerSprite(Index: Integer): TBitmap;
@@ -194,6 +199,7 @@ end;
 function TResourceManager.AddSprite(const FileNames: array of string; IsSolid, IsBehind: Boolean): Integer;
 begin
   Result := FSpriteSet.AddSprite(FileNames, IsSolid, IsBehind);
+  LogDebug('Added sprite at index ' + IntToStr(Result));
 end;
 
 end.

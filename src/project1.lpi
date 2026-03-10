@@ -102,6 +102,16 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="PathResolver"/>
       </Unit>
+      <Unit>
+        <Filename Value="core\soundmanager.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SoundManager"/>
+      </Unit>
+      <Unit>
+        <Filename Value="core\logger.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Logger"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

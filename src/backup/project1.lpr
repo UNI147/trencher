@@ -17,7 +17,13 @@ uses
   ResourceManager,
   GameTypes,
   Utils,
-  Level
+  Level,
+  TileSet,
+  SpriteSet,
+  AnimationController,
+  SpriteDescriptionParser,
+  PathResolver,
+  SoundManager
   { you can add units after this };
 
 {$R *.res}

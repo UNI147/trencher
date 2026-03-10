@@ -5,7 +5,8 @@ unit GameEngine;
 interface
 
 uses
-  Classes, SysUtils, Map, Player, ResourceManager, Graphics, Level, GameTypes;
+  Classes, SysUtils, Map, Player, ResourceManager, Graphics, Level, GameTypes,
+  SoundManager, Logger;
 
 type
   TGameEngine = class
@@ -16,6 +17,9 @@ type
     FSpeed: Double;
     FMoveLeft, FMoveRight, FMoveUp, FMoveDown: Boolean;
     FLevelsPath: string;
+    FSoundManager: TSoundManager;
+    FWasMoving: Boolean;
+    FMusicPath, FWindPath, FStepPath: string;
     function IsCellSolid(TileX, TileY: Integer): Boolean;
     procedure CheckTransitions;
   public
@@ -26,18 +30,19 @@ type
     procedure UpdateInput(Left, Right, Up, Down: Boolean);
     procedure Render(Canvas: TCanvas; DestRect: TRect);
     property Player: TPlayer read FPlayer;
+    procedure InitSounds(const MusicFile, WindFile, StepFile: string);
+    procedure StartMovingSounds;
+    procedure StopMovingSounds;
   end;
 
 implementation
 
-uses
-  Math;
-
 const
-  DIAGONAL_FACTOR = 0.7071067812;
+  DIAGONAL_FACTOR = 0.7071067812;  // 1/sqrt(2)
 
 constructor TGameEngine.Create(ATileSize: Integer; const ResourceRoot, LevelsPath: string);
 begin
+  LogDebug('TGameEngine.Create started');
   FLevelsPath := LevelsPath;
   FResources := TResourceManager.Create(ATileSize, ResourceRoot);
   FResources.LoadPlayerSprites;
@@ -48,14 +53,20 @@ begin
   FMoveRight := False;
   FMoveUp := False;
   FMoveDown := False;
+  FSoundManager := TSoundManager.Create;
+  FWasMoving := False;
+  LogDebug('TGameEngine.Create completed');
 end;
 
 destructor TGameEngine.Destroy;
 begin
+  LogDebug('TGameEngine.Destroy started');
   FLevel.Free;
   FResources.Free;
   FPlayer.Free;
+  FSoundManager.Free;
   inherited;
+  LogDebug('TGameEngine.Destroy completed');
 end;
 
 procedure TGameEngine.UpdateInput(Left, Right, Up, Down: Boolean);
@@ -68,14 +79,15 @@ end;
 
 procedure TGameEngine.LoadLevel(const Filename: string);
 begin
+  LogDebug('Loading level: ' + Filename);
   if Assigned(FLevel) then
     FLevel.Free;
 
-  // Используем размер тайла из FPlayer для создания уровня
   FLevel := TLevel.Create(FPlayer.TileSize, FResources);
   FLevel.LoadFromFile(FLevelsPath + Filename);
   FPlayer.SetPositionByTile(FLevel.StartX, FLevel.StartY);
   UpdateInput(False, False, False, False);
+  LogDebug('Level loaded. Start position: (' + IntToStr(FLevel.StartX) + ', ' + IntToStr(FLevel.StartY) + ')');
 end;
 
 procedure TGameEngine.Update(DeltaTime: Double);
@@ -83,6 +95,7 @@ var
   MoveX, MoveY: Double;
   OldTileX, OldTileY: Integer;
   Moved: Boolean;
+  IsMoving: Boolean;
 begin
   if FLevel = nil then Exit;
 
@@ -98,10 +111,25 @@ begin
     MoveY := MoveY * DIAGONAL_FACTOR;
   end;
 
+  IsMoving := (MoveX <> 0) or (MoveY <> 0);
+
+  // Управление звуками движения
+  if IsMoving and not FWasMoving then
+  begin
+    LogDebug('Movement started - playing step sound');
+    StartMovingSounds;
+  end
+  else if not IsMoving and FWasMoving then
+  begin
+    LogDebug('Movement stopped - stopping step sound');
+    StopMovingSounds;
+  end;
+  FWasMoving := IsMoving;
+
   OldTileX := FPlayer.TileX;
   OldTileY := FPlayer.TileY;
 
-  if (MoveX <> 0) or (MoveY <> 0) then
+  if IsMoving then
   begin
     FPlayer.Move(MoveX, MoveY, FLevel.Map, @IsCellSolid);
     Moved := True;
@@ -111,7 +139,6 @@ begin
 
   FResources.UpdateAnimation(DeltaTime);
 
-  // Используем Player.TileSize (теперь работает!)
   FLevel.UpdateDynamicLayers(Round(FPlayer.PixelY + FPlayer.TileSize));
 
   if (FPlayer.TileX <> OldTileX) or (FPlayer.TileY <> OldTileY) then
@@ -136,6 +163,9 @@ begin
   for i := 0 to High(Transitions) do
     if (Transitions[i].SrcX = CurrentTileX) and (Transitions[i].SrcY = CurrentTileY) then
     begin
+      LogDebug('Transition triggered at (' + IntToStr(CurrentTileX) + ', ' + IntToStr(CurrentTileY) + ')');
+      LogDebug('  Dest: ' + Transitions[i].DestMap + ' at (' + IntToStr(Transitions[i].DestX) + ', ' + IntToStr(Transitions[i].DestY) + ')');
+
       DestMap := Transitions[i].DestMap;
       DestX := Transitions[i].DestX;
       DestY := Transitions[i].DestY;
@@ -168,7 +198,6 @@ begin
     VirtualBmp.Canvas.Brush.Color := clBlack;
     VirtualBmp.Canvas.FillRect(0, 0, VirtualBmp.Width, VirtualBmp.Height);
 
-    // Карта
     for y := 0 to FLevel.Map.Height - 1 do
       for x := 0 to FLevel.Map.Width - 1 do
         if FLevel.Map.Tiles[x, y] >= 0 then
@@ -178,7 +207,6 @@ begin
             VirtualBmp.Canvas.Draw(x * FLevel.Map.TileSize, y * FLevel.Map.TileSize, TileBmp);
         end;
 
-    // Спрайты за игроком
     BehindSprites := FLevel.BehindSprites;
     for i := 0 to High(BehindSprites) do
     begin
@@ -188,12 +216,10 @@ begin
                                BehindSprites[i].Y * FLevel.Map.TileSize, SpriteBmp);
     end;
 
-    // Игрок
     PlayerBmp := FResources.GetPlayerSprite(FPlayer.Frame);
     if PlayerBmp <> nil then
       VirtualBmp.Canvas.Draw(Round(FPlayer.PixelX), Round(FPlayer.PixelY), PlayerBmp);
 
-    // Спрайты перед игроком
     FrontSprites := FLevel.FrontSprites;
     for i := 0 to High(FrontSprites) do
     begin
@@ -207,6 +233,60 @@ begin
   finally
     VirtualBmp.Free;
   end;
+end;
+
+procedure TGameEngine.InitSounds(const MusicFile, WindFile, StepFile: string);
+begin
+  LogSound('Initializing sounds...');
+  LogSound('  Music: ' + MusicFile);
+  LogSound('  Wind: ' + WindFile);
+  LogSound('  Step: ' + StepFile);
+
+  FMusicPath := MusicFile;
+  FWindPath := WindFile;
+  FStepPath := StepFile;
+
+  if FileExists(MusicFile) then
+  begin
+    LogSound('Music file exists, playing...');
+    FSoundManager.PlayMusic(FMusicPath, True);
+  end
+  else
+    LogError('Music file not found: ' + MusicFile);
+
+  if FileExists(WindFile) then
+  begin
+    LogSound('Wind file exists, playing...');
+    FSoundManager.PlayWind(FWindPath, True);
+  end
+  else
+    LogError('Wind file not found: ' + WindFile);
+end;
+
+procedure TGameEngine.StartMovingSounds;
+begin
+  LogSound('StartMovingSounds called');
+  if FStepPath <> '' then
+  begin
+    if FileExists(FStepPath) then
+    begin
+      LogSound('Playing step sound: ' + FStepPath);
+      FSoundManager.PlayStep(FStepPath, True);
+    end
+    else
+      LogError('Step file not found: ' + FStepPath);
+  end
+  else
+  begin
+    LogError('FStepPath is empty');
+    FSoundManager.PlayStep(ExtractFilePath(ParamStr(0)) + 'resources\effects\step.wav', True);
+  end;
+end;
+
+procedure TGameEngine.StopMovingSounds;
+begin
+  LogSound('StopMovingSounds called');
+  FSoundManager.StopStep;
 end;
 
 end.
