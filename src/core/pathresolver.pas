@@ -30,7 +30,7 @@ end;
 
 function TResourcePathResolver.GetFullPath(const ResourceType, FileName: string): string;
 begin
-  Result := ExtractFilePath(ParamStr(0)) + FResourceRoot + ResourceType + '\' + FileName;
+  Result := FResourceRoot + ResourceType + '\' + FileName;
 end;
 
 end.

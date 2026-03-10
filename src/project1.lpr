@@ -24,8 +24,8 @@ uses
   SpriteDescriptionParser,
   PathResolver,
   SoundManager,
-  Logger
-  { you can add units after this };
+  Logger,
+  ScriptEngine;
 
 {$R *.res}
 

@@ -1,0 +1,9 @@
+# Инициализируем пути к звукам в GameEngine
+init_sounds music\JRRTLotRV1.wav effects\wind.wav effects\step.wav
+
+# Загружаем музыку и звуки через SoundManager
+play_music music\JRRTLotRV1.wav loop
+play_ambient effects\wind.wav loop
+
+# Загружаем начальный уровень
+load_level level.txt

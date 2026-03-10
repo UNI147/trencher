@@ -40,3 +40,18 @@ water0.png, water1.png, solid
 8 6 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
 7 6 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
 2 7 stone.png, solid
+
+#triggers
+8 0 play_effect effects\wetstep.wav
+9 1 play_effect effects\wetstep.wav
+10 2 play_effect effects\wetstep.wav
+11 3 play_effect effects\wetstep.wav
+12 4 play_effect effects\wetstep.wav
+13 5 play_effect effects\wetstep.wav
+14 6 play_effect effects\wetstep.wav
+15 7 play_effect effects\wetstep.wav
+8 5 play_effect effects\wetstep.wav
+7 5 play_effect effects\wetstep.wav
+6 5 play_effect effects\wetstep.wav
+8 6 play_effect effects\wetstep.wav
+7 6 play_effect effects\wetstep.wav

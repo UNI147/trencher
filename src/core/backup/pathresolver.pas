@@ -9,7 +9,7 @@ uses
 
 type
   IPathResolver = interface
-    ['{E1A2B3C4-D5E6-F7G8-H9I0-J1K2L3M4N5O6}']
+    //['{E1A2B3C4-D5E6-F7G8-H9I0-J1K2L3M4N5O6}']
     function GetFullPath(const ResourceType, FileName: string): string;
   end;
 

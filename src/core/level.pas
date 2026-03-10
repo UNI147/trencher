@@ -6,9 +6,17 @@ interface
 
 uses
   Classes, SysUtils, Map, GameTypes, ResourceManager, Utils,
-  SpriteDescriptionParser;
+  SpriteDescriptionParser, ScriptEngine;
 
 type
+  // Сначала объявляем тип TTrigger
+  TTrigger = record
+    X, Y: Integer;
+    ScriptOrCommand: string; // может быть именем файла или прямой командой
+  end;
+
+  TTriggerArray = array of TTrigger;
+
   TLevel = class
   private
     FMap: TMap;
@@ -19,6 +27,7 @@ type
     FFrontSprites: TMapSpriteArray;
     FResourceManager: TResourceManager;
     FStartX, FStartY: Integer;
+    FTriggers: TTriggerArray;  // поле для хранения триггеров
     procedure BuildSolidSpriteMap;
     procedure SortSpritesByLayer;
   public
@@ -27,6 +36,7 @@ type
     procedure LoadFromFile(const Filename: string);
     procedure UpdateDynamicLayers(PlayerFootY: Integer);
     function IsSpriteSolid(TileX, TileY: Integer): Boolean;
+    function CheckTriggers(PlayerTileX, PlayerTileY: Integer; ScriptEngine: TScriptEngine): Boolean;
     property Map: TMap read FMap;
     property Transitions: TTransitionArray read FTransitions;
     property BehindSprites: TMapSpriteArray read FBehindSprites;
@@ -50,6 +60,7 @@ begin
   FSolidSpriteMap := nil;
   FStartX := 0;
   FStartY := 0;
+  FTriggers := nil;  // Инициализируем триггеры
 end;
 
 destructor TLevel.Destroy;
@@ -190,6 +201,40 @@ begin
       end;
     end;
 
+    // #triggers
+    FTriggers := nil;
+    while (i < Lines.Count) and (Trim(Lines[i]) = '') do Inc(i);
+    if (i < Lines.Count) and (Trim(Lines[i]) = '#triggers') then
+    begin
+      Inc(i);
+      while i < Lines.Count do
+      begin
+        while (i < Lines.Count) and (Trim(Lines[i]) = '') do Inc(i);
+        if i >= Lines.Count then Break;
+        if Trim(Lines[i])[1] = '#' then Break;
+
+        Line := Trim(Lines[i]);
+        Tokens := SplitString(Line, ' ');
+        if Length(Tokens) >= 3 then
+        begin
+          X := StrToInt(Tokens[0]);
+          Y := StrToInt(Tokens[1]);
+          // остальное – команда/скрипт (может содержать пробелы)
+          Desc := '';
+          for j := 2 to High(Tokens) do
+          begin
+            if j > 2 then Desc := Desc + ' ';
+            Desc := Desc + Tokens[j];
+          end;
+          SetLength(FTriggers, Length(FTriggers) + 1);
+          FTriggers[High(FTriggers)].X := X;
+          FTriggers[High(FTriggers)].Y := Y;
+          FTriggers[High(FTriggers)].ScriptOrCommand := Desc;
+        end;
+        Inc(i);
+      end;
+    end;
+
     BuildSolidSpriteMap;
     SortSpritesByLayer;
 
@@ -285,6 +330,28 @@ begin
         SetLength(FFrontSprites, Length(FFrontSprites) + 1);
         FFrontSprites[High(FFrontSprites)] := FSprites[i];
       end;
+    end;
+  end;
+end;
+
+function TLevel.CheckTriggers(PlayerTileX, PlayerTileY: Integer; ScriptEngine: TScriptEngine): Boolean;
+var
+  i: Integer;
+  Trig: TTrigger;
+begin
+  Result := False;
+  for i := 0 to High(FTriggers) do
+  begin
+    Trig := FTriggers[i];
+    if (Trig.X = PlayerTileX) and (Trig.Y = PlayerTileY) then
+    begin
+      // Выполнить команду или скрипт
+      if FileExists(Trig.ScriptOrCommand) then
+        ScriptEngine.ExecuteFile(Trig.ScriptOrCommand)
+      else
+        ScriptEngine.Execute(Trig.ScriptOrCommand);
+      Result := True; // можно остановиться после первого сработавшего триггера
+      // Break; // если нужен только один триггер на клетку
     end;
   end;
 end;

@@ -20,6 +20,7 @@ type
     FTimer: TTimer;
     FVirtualWidth, FVirtualHeight: Integer;
     FJoystickAvailable: Boolean;
+    FResourcesPath: string;  // Добавляем поле для хранения пути к ресурсам
   public
   end;
 
@@ -34,63 +35,59 @@ const
   VIRTUAL_WIDTH = 320;
   VIRTUAL_HEIGHT = 200;
   TILE_SIZE = 20;
-  RESOURCES_ROOT = '..\resources\';
-
-procedure CheckMCIDrivers;
-var
-  ReturnStr: string;
-  Cmd: string;
-begin
-  Cmd := 'sysinfo all quantity';
-  if mciSendString(PChar(Cmd), nil, 0, 0) = 0 then
-    LogDebug('MCI system available');
-end;
+  RESOURCES_ROOT = '..\resources\';  // Относительный путь от src к resources
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
   LevelsPath: string;
   ji: JOYINFO;
-  MusicPath, WindPath, StepPath: string;
   AppPath: string;
+  ScriptPath: string;
 begin
   AppPath := ExtractFilePath(ParamStr(0));
   LogDebug('Application started');
   LogDebug('Application path: ' + AppPath);
 
-  // Проверка MCI
-  CheckMCIDrivers;
+  // Формируем абсолютный путь к ресурсам
+  FResourcesPath := ExpandFileName(AppPath + RESOURCES_ROOT);
+  LogDebug('Resources path: ' + FResourcesPath);
 
   KeyPreview := True;
   FVirtualWidth := VIRTUAL_WIDTH;
   FVirtualHeight := VIRTUAL_HEIGHT;
 
-  LevelsPath := AppPath + RESOURCES_ROOT + 'levels\';
+  LevelsPath := FResourcesPath + 'levels\';
   LogDebug('Levels path: ' + LevelsPath);
 
-  FGameEngine := TGameEngine.Create(TILE_SIZE, RESOURCES_ROOT, LevelsPath);
-  FGameEngine.LoadLevel('level.txt');
-  LogDebug('Level loaded');
-
-  FTimer := TTimer.Create(Self);
-  FTimer.Interval := 41;
-  FTimer.OnTimer := @TimerTick;
+  // Создаем игровой движок
+  FGameEngine := TGameEngine.Create(TILE_SIZE, FResourcesPath, LevelsPath);
 
   // Проверяем джойстик
   FJoystickAvailable := (joyGetPos(JOYSTICKID1, @ji) = JOYERR_NOERROR);
   LogDebug('Joystick available: ' + BoolToStr(FJoystickAvailable, True));
 
-  // Проверяем звуковые файлы
-  MusicPath := AppPath + RESOURCES_ROOT + 'music\JRRTLotRV1.mp3';
-  WindPath  := AppPath + RESOURCES_ROOT + 'effects\wind.wav';
-  StepPath  := AppPath + RESOURCES_ROOT + 'effects\step.wav';
+  // Инициализируем пути к звукам (относительные от корня ресурсов)
+  FGameEngine.InitSounds(
+    'music\background.wav',    // Музыка
+    'effects\wind.wav',        // Фоновый шум (ambient)
+    'effects\step.wav'         // Шаги
+  );
 
-  LogDebug('Checking sound files:');
-  LogDebug('  Music: ' + MusicPath + ' - ' + BoolToStr(FileExists(MusicPath), True));
-  LogDebug('  Wind: ' + WindPath + ' - ' + BoolToStr(FileExists(WindPath), True));
-  LogDebug('  Step: ' + StepPath + ' - ' + BoolToStr(FileExists(StepPath), True));
+  // Загружаем стартовый скрипт
+  ScriptPath := FResourcesPath + 'scripts\startup.txt';
+  LogDebug('Script path: ' + ScriptPath);
 
-  FGameEngine.InitSounds(MusicPath, WindPath, StepPath);
-  LogDebug('Sound initialization completed');
+  if FileExists(ScriptPath) then
+    FGameEngine.ScriptEngine.ExecuteFile(ScriptPath)
+  else
+    LogError('Startup script not found: ' + ScriptPath);
+
+  // Создаем таймер после загрузки скрипта
+  FTimer := TTimer.Create(Self);
+  FTimer.Interval := 41; // ~24 FPS
+  FTimer.OnTimer := @TimerTick;
+
+  LogDebug('Startup script executed');
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);

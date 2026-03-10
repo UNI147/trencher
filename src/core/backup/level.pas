@@ -1,11 +1,22 @@
 unit Level;
 
+{$mode objfpc}{$H+}
+
 interface
 
 uses
-  Classes, SysUtils, Map, GameTypes, ResourceManager, Utils;
+  Classes, SysUtils, Map, GameTypes, ResourceManager, Utils,
+  SpriteDescriptionParser, ScriptEngine;
 
 type
+  // Сначала объявляем тип TTrigger
+  TTrigger = record
+    X, Y: Integer;
+    ScriptOrCommand: string; // может быть именем файла или прямой командой
+  end;
+
+  TTriggerArray = array of TTrigger;
+
   TLevel = class
   private
     FMap: TMap;
@@ -16,6 +27,7 @@ type
     FFrontSprites: TMapSpriteArray;
     FResourceManager: TResourceManager;
     FStartX, FStartY: Integer;
+    FTriggers: TTriggerArray;  // поле для хранения триггеров
     procedure BuildSolidSpriteMap;
     procedure SortSpritesByLayer;
   public
@@ -24,6 +36,7 @@ type
     procedure LoadFromFile(const Filename: string);
     procedure UpdateDynamicLayers(PlayerFootY: Integer);
     function IsSpriteSolid(TileX, TileY: Integer): Boolean;
+    function CheckTriggers(PlayerTileX, PlayerTileY: Integer; ScriptEngine: TScriptEngine): Boolean;
     property Map: TMap read FMap;
     property Transitions: TTransitionArray read FTransitions;
     property BehindSprites: TMapSpriteArray read FBehindSprites;
@@ -33,6 +46,9 @@ type
   end;
 
 implementation
+
+uses
+  ScriptEngine;  // Добавляем для использования TScriptEngine
 
 { TLevel }
 
@@ -47,6 +63,7 @@ begin
   FSolidSpriteMap := nil;
   FStartX := 0;
   FStartY := 0;
+  FTriggers := nil;  // Инициализируем триггеры
 end;
 
 destructor TLevel.Destroy;
@@ -167,8 +184,11 @@ begin
           Desc := Desc + Tokens[j];
         end;
 
-        FResourceManager.ParseSpriteDescription(Desc, FileNames, IsSolid, IsBehind);
-        SpriteResIndex := FResourceManager.AddSpriteFrames(FileNames);
+        // Используем новый парсер
+        TSpriteDescriptionParser.Parse(Desc, FileNames, IsSolid, IsBehind);
+
+        // Используем новый метод ResourceManager для добавления спрайта
+        SpriteResIndex := FResourceManager.AddSprite(FileNames, IsSolid, IsBehind);
 
         SetLength(FSprites, Length(FSprites) + 1);
         FSprites[High(FSprites)].X := X;
@@ -180,6 +200,40 @@ begin
         else
           FSprites[High(FSprites)].Layer := slFront;
         FSprites[High(FSprites)].BaseY := FMap.TileSize;
+        Inc(i);
+      end;
+    end;
+
+    // #triggers
+    FTriggers := nil;
+    while (i < Lines.Count) and (Trim(Lines[i]) = '') do Inc(i);
+    if (i < Lines.Count) and (Trim(Lines[i]) = '#triggers') then
+    begin
+      Inc(i);
+      while i < Lines.Count do
+      begin
+        while (i < Lines.Count) and (Trim(Lines[i]) = '') do Inc(i);
+        if i >= Lines.Count then Break;
+        if Trim(Lines[i])[1] = '#' then Break;
+
+        Line := Trim(Lines[i]);
+        Tokens := SplitString(Line, ' ');
+        if Length(Tokens) >= 3 then
+        begin
+          X := StrToInt(Tokens[0]);
+          Y := StrToInt(Tokens[1]);
+          // остальное – команда/скрипт (может содержать пробелы)
+          Desc := '';
+          for j := 2 to High(Tokens) do
+          begin
+            if j > 2 then Desc := Desc + ' ';
+            Desc := Desc + Tokens[j];
+          end;
+          SetLength(FTriggers, Length(FTriggers) + 1);
+          FTriggers[High(FTriggers)].X := X;
+          FTriggers[High(FTriggers)].Y := Y;
+          FTriggers[High(FTriggers)].ScriptOrCommand := Desc;
+        end;
         Inc(i);
       end;
     end;
@@ -283,5 +337,26 @@ begin
   end;
 end;
 
-end.
+function TLevel.CheckTriggers(PlayerTileX, PlayerTileY: Integer; ScriptEngine: TScriptEngine): Boolean;
+var
+  i: Integer;
+  Trig: TTrigger;
+begin
+  Result := False;
+  for i := 0 to High(FTriggers) do
+  begin
+    Trig := FTriggers[i];
+    if (Trig.X = PlayerTileX) and (Trig.Y = PlayerTileY) then
+    begin
+      // Выполнить команду или скрипт
+      if FileExists(Trig.ScriptOrCommand) then
+        ScriptEngine.ExecuteFile(Trig.ScriptOrCommand)
+      else
+        ScriptEngine.Execute(Trig.ScriptOrCommand);
+      Result := True; // можно остановиться после первого сработавшего триггера
+      // Break; // если нужен только один триггер на клетку
+    end;
+  end;
+end;
 
+end.

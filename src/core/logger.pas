@@ -10,6 +10,7 @@ uses
 procedure LogDebug(const Msg: string);
 procedure LogError(const Msg: string);
 procedure LogSound(const Msg: string);
+procedure LogScript(const Msg: string);
 
 implementation
 
@@ -26,7 +27,6 @@ begin
   LogFile := TStringList.Create;
   LogPath := ExtractFilePath(ParamStr(0)) + 'debug_log.txt';
 
-  // Добавляем заголовок с временем запуска
   LogFile.Add('=== Game Debug Log ===');
   LogFile.Add('Start time: ' + DateTimeToStr(Now));
   LogFile.Add('Working directory: ' + ExtractFilePath(ParamStr(0)));
@@ -52,14 +52,13 @@ begin
     LogFile.Add(Format('[%s] %s: %s', [TimeStr, Prefix, Msg]));
     LogFile.SaveToFile(LogPath);
   except
-    // Если не получается записать в файл, пробуем создать новый
     try
       LogFile.Clear;
       LogFile.Add('=== Game Debug Log (recreated) ===');
       LogFile.Add(Format('[%s] %s: %s', [TimeStr, Prefix, Msg]));
       LogFile.SaveToFile(LogPath);
     except
-      // Игнорируем ошибки записи
+      // игнорируем
     end;
   end;
 end;
@@ -80,6 +79,12 @@ procedure LogSound(const Msg: string);
 begin
   WriteToLog('SOUND', Msg);
   OutputDebugString(PChar('SOUND: ' + Msg));
+end;
+
+procedure LogScript(const Msg: string);
+begin
+  WriteToLog('SCRIPT', Msg);
+  OutputDebugString(PChar('SCRIPT: ' + Msg));
 end;
 
 finalization

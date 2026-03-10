@@ -112,6 +112,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Logger"/>
       </Unit>
+      <Unit>
+        <Filename Value="core\scriptengine.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ScriptEngine"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -5,7 +5,7 @@ unit Logger;
 interface
 
 uses
-  SysUtils, Classes;
+  SysUtils, Classes, Windows;
 
 procedure LogDebug(const Msg: string);
 procedure LogError(const Msg: string);

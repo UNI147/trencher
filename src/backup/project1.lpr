@@ -23,7 +23,8 @@ uses
   AnimationController,
   SpriteDescriptionParser,
   PathResolver,
-  SoundManager
+  SoundManager,
+  Logger
   { you can add units after this };
 
 {$R *.res}
