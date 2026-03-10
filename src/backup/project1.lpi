@@ -62,6 +62,46 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="GameEngine"/>
       </Unit>
+      <Unit>
+        <Filename Value="core\gametypes.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GameTypes"/>
+      </Unit>
+      <Unit>
+        <Filename Value="core\utils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Utils"/>
+      </Unit>
+      <Unit>
+        <Filename Value="core\level.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Level"/>
+      </Unit>
+      <Unit>
+        <Filename Value="core\tileset.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TileSet"/>
+      </Unit>
+      <Unit>
+        <Filename Value="core\spriteset.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SpriteSet"/>
+      </Unit>
+      <Unit>
+        <Filename Value="core\animationcontroller.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="AnimationController"/>
+      </Unit>
+      <Unit>
+        <Filename Value="core\spritedescriptionparser.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SpriteDescriptionParser"/>
+      </Unit>
+      <Unit>
+        <Filename Value="core\pathresolver.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="PathResolver"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

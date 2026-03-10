@@ -28,7 +28,6 @@ type
     FSpriteResources: array of TTile;
     function GetFullPath(const ResourceType, FileName: string): string;
     function SplitString(const S: string; Delimiter: Char): TStringArray;
-    function GetSpriteHeight(Index: Integer): Integer;
   public
     constructor Create(ATileSize: Integer; const ARoot: string);
     destructor Destroy; override;
@@ -43,6 +42,7 @@ type
     function GetSpriteImage(Index: Integer): TBitmap;
     procedure ParseSpriteDescription(const Desc: string;
       out FileNames: TStringArray; out IsSolid, IsBehind: Boolean);
+    function GetSpriteHeight(Index: Integer): Integer;
   end;
 
 implementation

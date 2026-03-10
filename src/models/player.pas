@@ -5,7 +5,7 @@ unit Player;
 interface
 
 uses
-  Classes, SysUtils, Math, Map, ResourceManager;
+  Classes, SysUtils, Math, Map;
 
 type
   TIsSolidFunc = function(TileX, TileY: Integer): Boolean of object;
@@ -30,6 +30,7 @@ type
     property TileX: Integer read FLastTileX;
     property TileY: Integer read FLastTileY;
     property Frame: Integer read FFrame;
+    property TileSize: Integer read FTileSize;
   end;
 
 implementation
@@ -59,16 +60,15 @@ procedure TPlayer.Move(DeltaX, DeltaY: Double; Map: TMap; IsSolidCallback: TIsSo
 var
   newX, newY: Double;
   w, h: Integer;
-  tileSize: Integer;
 
   function RectCollides(x, y: Double): Boolean;
   var
     leftTile, rightTile, topTile, bottomTile, tx, ty: Integer;
   begin
-    leftTile := Floor(x / tileSize);
-    rightTile := Floor((x + w - 1) / tileSize);
-    topTile := Floor(y / tileSize);
-    bottomTile := Floor((y + h - 1) / tileSize);
+    leftTile := Floor(x / FTileSize);
+    rightTile := Floor((x + w - 1) / FTileSize);
+    topTile := Floor(y / FTileSize);
+    bottomTile := Floor((y + h - 1) / FTileSize);
 
     // Проверка границ карты
     if leftTile < 0 then leftTile := 0;
@@ -86,7 +86,6 @@ var
   end;
 
 begin
-  tileSize := FTileSize;
   w := FTileSize;
   h := FTileSize;
 
@@ -96,7 +95,7 @@ begin
     newX := FPixelX + DeltaX;
     // Границы карты
     if newX < 0 then newX := 0;
-    if newX > (Map.Width - 1) * tileSize then newX := (Map.Width - 1) * tileSize;
+    if newX > (Map.Width - 1) * FTileSize then newX := (Map.Width - 1) * FTileSize;
     // Проверка столкновений
     if not RectCollides(newX, FPixelY) then
       FPixelX := newX;
@@ -108,7 +107,7 @@ begin
     newY := FPixelY + DeltaY;
     // Границы карты
     if newY < 0 then newY := 0;
-    if newY > (Map.Height - 1) * tileSize then newY := (Map.Height - 1) * tileSize;
+    if newY > (Map.Height - 1) * FTileSize then newY := (Map.Height - 1) * FTileSize;
     // Проверка столкновений
     if not RectCollides(FPixelX, newY) then
       FPixelY := newY;

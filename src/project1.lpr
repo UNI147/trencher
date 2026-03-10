@@ -14,7 +14,15 @@ uses
   GameEngine,
   Map,
   Player,
-  ResourceManager
+  ResourceManager,
+  GameTypes,
+  Utils,
+  Level,
+  TileSet,
+  SpriteSet,
+  AnimationController,
+  SpriteDescriptionParser,
+  PathResolver
   { you can add units after this };
 
 {$R *.res}
