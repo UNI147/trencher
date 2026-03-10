@@ -21,3 +21,22 @@ water0.png, water1.png, solid
 
 #transition
 15 9 level.txt 0 0
+
+#sprites
+2 0 grass.png
+0 1 grass.png
+1 2 grass.png
+8 0 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+9 1 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+10 2 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+11 3 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+12 4 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+13 5 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+14 6 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+15 7 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+8 5 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+7 5 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+6 5 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+8 6 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+7 6 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+2 7 stone.png, solid

@@ -77,7 +77,7 @@ var
   startPressed: Boolean;
 const
   DEADZONE = 10000;
-  JOY_BUTTON_START = $0200;
+  JOY_BUTTON_START = $0200;  // Кнопка 10 (Start)
 begin
   // --- Ввод с клавиатуры ---
   keyLeft   := (GetKeyState(VK_LEFT) and $8000) <> 0;

@@ -8,7 +8,7 @@ uses
   Classes, SysUtils;
 
 type
-  TStringArray = array of string;  // Добавьте это определение
+  TStringArray = array of string;
 
   TMap = class
   private

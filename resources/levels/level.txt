@@ -7,13 +7,13 @@ water0.png, water1.png, solid
 16 10
 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0
+0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0
 0 0 1 1 2 2 1 1 0 0 0 0 0 0 0 0
 0 0 1 1 2 2 1 1 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0
-0 0 1 1 1 1 1 1 0 0 0 0 0 1 1 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0
+0 0 0 1 1 1 1 0 0 0 0 0 0 1 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1
 
 #player
@@ -21,3 +21,11 @@ water0.png, water1.png, solid
 
 #transition
 15 9 level2.txt 0 0
+
+#sprites
+14 1 grass.png
+14 2 grass.png
+13 2 grass.png
+4 3 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+5 6 reeds0.png,reeds1.png,reeds2.png,reeds1.png, front
+13 9 stone.png, solid

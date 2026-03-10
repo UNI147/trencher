@@ -48,7 +48,7 @@ begin
   LevelsPath := ExtractFilePath(ParamStr(0)) + RESOURCES_ROOT + 'levels\';
 
   FGameEngine := TGameEngine.Create(TILE_SIZE, RESOURCES_ROOT, LevelsPath);
-  FGameEngine.LoadLevel('level.txt');  // Теперь только имя файла
+  FGameEngine.LoadLevel('level2.txt');  // Теперь только имя файла
 
   FTimer := TTimer.Create(Self);
   FTimer.Interval := 41; // ~24 FPS

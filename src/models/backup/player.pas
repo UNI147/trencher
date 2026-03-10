@@ -5,9 +5,11 @@ unit Player;
 interface
 
 uses
-  Classes, SysUtils, Math;
+  Classes, SysUtils, Math, Map, ResourceManager;
 
 type
+  TIsSolidFunc = function(TileX, TileY: Integer): Boolean of object;
+
   TPlayer = class
   private
     FPixelX, FPixelY: Double;
@@ -21,13 +23,14 @@ type
   public
     constructor Create(ATileSize: Integer; ASpeed: Double);
     procedure SetPositionByTile(TileX, TileY: Integer);
-    procedure Move(DeltaX, DeltaY: Double; MapWidth, MapHeight: Integer);
+    procedure Move(DeltaX, DeltaY: Double; Map: TMap; IsSolidCallback: TIsSolidFunc);
     procedure UpdateAnimation(Moved: Boolean);
     property PixelX: Double read FPixelX;
     property PixelY: Double read FPixelY;
     property TileX: Integer read FLastTileX;
     property TileY: Integer read FLastTileY;
     property Frame: Integer read FFrame;
+    function GetSpeed: Double;
   end;
 
 implementation
@@ -53,21 +56,65 @@ begin
   FLastTileY := TileY;
 end;
 
-procedure TPlayer.Move(DeltaX, DeltaY: Double; MapWidth, MapHeight: Integer);
+procedure TPlayer.Move(DeltaX, DeltaY: Double; Map: TMap; IsSolidCallback: TIsSolidFunc);
 var
-  NewX, NewY: Double;
+  newX, newY: Double;
+  w, h: Integer;
+  tileSize: Integer;
+
+  function RectCollides(x, y: Double): Boolean;
+  var
+    leftTile, rightTile, topTile, bottomTile, tx, ty: Integer;
+  begin
+    leftTile := Floor(x / tileSize);
+    rightTile := Floor((x + w - 1) / tileSize);
+    topTile := Floor(y / tileSize);
+    bottomTile := Floor((y + h - 1) / tileSize);
+
+    // Проверка границ карты
+    if leftTile < 0 then leftTile := 0;
+    if rightTile >= Map.Width then rightTile := Map.Width - 1;
+    if topTile < 0 then topTile := 0;
+    if bottomTile >= Map.Height then bottomTile := Map.Height - 1;
+
+    // Проверка столкновений через callback
+    for ty := topTile to bottomTile do
+      for tx := leftTile to rightTile do
+        if IsSolidCallback(tx, ty) then
+          Exit(True);
+
+    Result := False;
+  end;
+
 begin
-  NewX := FPixelX + DeltaX;
-  NewY := FPixelY + DeltaY;
+  tileSize := FTileSize;
+  w := FTileSize;
+  h := FTileSize;
 
-  // Ограничение границами
-  if NewX < 0 then NewX := 0;
-  if NewY < 0 then NewY := 0;
-  if NewX > (MapWidth - 1) * FTileSize then NewX := (MapWidth - 1) * FTileSize;
-  if NewY > (MapHeight - 1) * FTileSize then NewY := (MapHeight - 1) * FTileSize;
+  // Движение по X
+  if DeltaX <> 0 then
+  begin
+    newX := FPixelX + DeltaX;
+    // Границы карты
+    if newX < 0 then newX := 0;
+    if newX > (Map.Width - 1) * tileSize then newX := (Map.Width - 1) * tileSize;
+    // Проверка столкновений
+    if not RectCollides(newX, FPixelY) then
+      FPixelX := newX;
+  end;
 
-  FPixelX := NewX;
-  FPixelY := NewY;
+  // Движение по Y
+  if DeltaY <> 0 then
+  begin
+    newY := FPixelY + DeltaY;
+    // Границы карты
+    if newY < 0 then newY := 0;
+    if newY > (Map.Height - 1) * tileSize then newY := (Map.Height - 1) * tileSize;
+    // Проверка столкновений
+    if not RectCollides(FPixelX, newY) then
+      FPixelY := newY;
+  end;
+
   UpdateTilePosition;
 end;
 
@@ -101,6 +148,11 @@ begin
     FAnimStep := 0;
     FAnimTimer := 0;
   end;
+end;
+
+function TPlayer.GetSpeed: Double;
+begin
+  Result := FSpeed;
 end;
 
 end.

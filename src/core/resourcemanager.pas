@@ -8,11 +8,12 @@ uses
   Classes, SysUtils, Graphics, ExtCtrls;
 
 type
-  TStringArray = array of string;  // Добавляем для совместимости
+  TStringArray = array of string;
 
   TTile = record
     Frames: array of TBitmap;
     IsSolid: Boolean;
+    SpriteHeight: Integer;
   end;
 
   TResourceManager = class
@@ -24,9 +25,9 @@ type
     FAnimFrame: Integer;
     FAnimTime: Double;
     FAnimInterval: Double;
+    FSpriteResources: array of TTile;
     function GetFullPath(const ResourceType, FileName: string): string;
     function SplitString(const S: string; Delimiter: Char): TStringArray;
-    function ExtractFlags(const Items: TStringArray; out CleanItems: TStringArray): Boolean;
   public
     constructor Create(ATileSize: Integer; const ARoot: string);
     destructor Destroy; override;
@@ -37,6 +38,11 @@ type
     function GetPlayerSprite(Index: Integer): TBitmap;
     function IsTileSolid(Index: Integer): Boolean;
     property TileSize: Integer read FTileSize;
+    function AddSpriteFrames(const FileNames: TStringArray): Integer;
+    function GetSpriteImage(Index: Integer): TBitmap;
+    procedure ParseSpriteDescription(const Desc: string;
+      out FileNames: TStringArray; out IsSolid, IsBehind: Boolean);
+    function GetSpriteHeight(Index: Integer): Integer;
   end;
 
 implementation
@@ -61,6 +67,9 @@ begin
       FTiles[i].Frames[j].Free;
   for i := 0 to High(FPlayerSprites) do
     FPlayerSprites[i].Free;
+  for i := 0 to High(FSpriteResources) do
+    for j := 0 to High(FSpriteResources[i].Frames) do
+      FSpriteResources[i].Frames[j].Free;
   inherited;
 end;
 
@@ -95,55 +104,12 @@ begin
   end;
 end;
 
-function TResourceManager.ExtractFlags(const Items: TStringArray; out CleanItems: TStringArray): Boolean;
-var
-  i, j: Integer;
-  LastItem: string;
-begin
-  Result := False;  // По умолчанию solid = false
-  CleanItems := nil;
-
-  if Length(Items) = 0 then
-    Exit;
-
-  // Проверяем последний элемент на наличие флага solid
-  LastItem := LowerCase(Items[High(Items)]);
-  if (LastItem = 'solid') then
-  begin
-    Result := True;  // solid = true
-    // Копируем все элементы кроме последнего
-    SetLength(CleanItems, Length(Items) - 1);
-    for i := 0 to Length(Items) - 2 do
-      CleanItems[i] := Items[i];
-  end
-  else
-  begin
-    // Просто копируем все элементы
-    SetLength(CleanItems, Length(Items));
-    for i := 0 to High(Items) do
-      CleanItems[i] := Items[i];
-  end;
-
-  // Дополнительная проверка: если после удаления solid остались пустые строки - убираем их
-  i := 0;
-  while i < Length(CleanItems) do
-  begin
-    if CleanItems[i] = '' then
-    begin
-      for j := i to Length(CleanItems) - 2 do
-        CleanItems[j] := CleanItems[j+1];
-      SetLength(CleanItems, Length(CleanItems) - 1);
-    end
-    else
-      Inc(i);
-  end;
-end;
-
 procedure TResourceManager.LoadTiles(const TileNames: TStrings);
 var
   i, j: Integer;
-  RawItems: TStringArray;
-  CleanItems: TStringArray;
+  Items: TStringArray;
+  FileName: string;
+  LastItem: string;
   IsSolid: Boolean;
   Pict: TPicture;
 begin
@@ -152,24 +118,39 @@ begin
   for i := 0 to TileNames.Count - 1 do
   begin
     // Разбиваем строку по запятым
-    RawItems := SplitString(TileNames[i], ',');
+    Items := SplitString(TileNames[i], ',');
 
-    // Извлекаем флаги (solid) и получаем чистый список файлов
-    IsSolid := ExtractFlags(RawItems, CleanItems);
-
-    if Length(CleanItems) = 0 then
-      raise Exception.CreateFmt('Нет имени файла для тайла в строке: %s', [TileNames[i]]);
+    // Проверяем, есть ли флаг solid
+    IsSolid := False;
+    if Length(Items) > 0 then
+    begin
+      LastItem := LowerCase(Trim(Items[High(Items)]));
+      if LastItem = 'solid' then
+      begin
+        IsSolid := True;
+        // Убираем последний элемент (solid) из списка файлов
+        SetLength(Items, Length(Items) - 1);
+      end;
+    end;
 
     FTiles[i].IsSolid := IsSolid;
-    SetLength(FTiles[i].Frames, Length(CleanItems));
+
+    if Length(Items) = 0 then
+      raise Exception.CreateFmt('Нет имени файла для тайла в строке: %s', [TileNames[i]]);
+
+    SetLength(FTiles[i].Frames, Length(Items));
 
     // Загружаем каждый кадр
-    for j := 0 to High(CleanItems) do
+    for j := 0 to High(Items) do
     begin
+      FileName := Trim(Items[j]);
+      if FileName = '' then
+        Continue;
+
       FTiles[i].Frames[j] := TBitmap.Create;
       Pict := TPicture.Create;
       try
-        Pict.LoadFromFile(GetFullPath('tiles', CleanItems[j]));
+        Pict.LoadFromFile(GetFullPath('tiles', FileName));
         FTiles[i].Frames[j].Assign(Pict.Bitmap);
         if (FTiles[i].Frames[j].Width <> FTileSize) or (FTiles[i].Frames[j].Height <> FTileSize) then
           FTiles[i].Frames[j].SetSize(FTileSize, FTileSize);
@@ -255,6 +236,118 @@ begin
     Result := FTiles[Index].IsSolid
   else
     Result := False;
+end;
+
+function TResourceManager.AddSpriteFrames(const FileNames: TStringArray): Integer;
+var
+  idx, j: Integer;
+  Pict: TPicture;
+begin
+  idx := Length(FSpriteResources);
+  SetLength(FSpriteResources, idx + 1);
+  SetLength(FSpriteResources[idx].Frames, Length(FileNames));
+  FSpriteResources[idx].SpriteHeight := FTileSize; // По умолчанию
+
+  for j := 0 to High(FileNames) do
+  begin
+    FSpriteResources[idx].Frames[j] := TBitmap.Create;
+    Pict := TPicture.Create;
+    try
+      Pict.LoadFromFile(GetFullPath('sprites', FileNames[j]));
+      FSpriteResources[idx].Frames[j].Assign(Pict.Bitmap);
+      if (FSpriteResources[idx].Frames[j].Width <> FTileSize) or
+         (FSpriteResources[idx].Frames[j].Height <> FTileSize) then
+      begin
+        // Сохраняем оригинальную высоту для перспективы
+        FSpriteResources[idx].SpriteHeight := FSpriteResources[idx].Frames[j].Height;
+        FSpriteResources[idx].Frames[j].SetSize(FTileSize, FTileSize);
+      end;
+    finally
+      Pict.Free;
+    end;
+  end;
+  FSpriteResources[idx].IsSolid := False;
+  Result := idx;
+end;
+
+function TResourceManager.GetSpriteHeight(Index: Integer): Integer;
+begin
+  if (Index >= 0) and (Index < Length(FSpriteResources)) then
+    Result := FSpriteResources[Index].SpriteHeight
+  else
+    Result := FTileSize;
+end;
+
+function TResourceManager.GetSpriteImage(Index: Integer): TBitmap;
+var
+  cnt: Integer;
+  frame: Integer;
+begin
+  if (Index >= 0) and (Index < Length(FSpriteResources)) then
+  begin
+    cnt := Length(FSpriteResources[Index].Frames);
+    if cnt > 0 then
+    begin
+      frame := FAnimFrame mod cnt;
+      Result := FSpriteResources[Index].Frames[frame];
+    end
+    else
+      Result := nil;
+  end
+  else
+    Result := nil;
+end;
+
+procedure TResourceManager.ParseSpriteDescription(const Desc: string;
+  out FileNames: TStringArray; out IsSolid, IsBehind: Boolean);
+var
+  Items: TStringArray;
+  i: Integer;
+  TempFiles: TStringArray;
+begin
+  Items := SplitString(Desc, ',');
+  IsBehind := True;    // по умолчанию за игроком
+  IsSolid := False;
+  TempFiles := nil;
+
+  for i := 0 to High(Items) do
+  begin
+    Items[i] := LowerCase(Trim(Items[i]));  // приводим к нижнему регистру для сравнения
+
+    if Items[i] = 'behind' then
+      IsBehind := True
+    else if Items[i] = 'front' then
+      IsBehind := False
+    else if Items[i] = 'solid' then
+      IsSolid := True
+    else if Items[i] <> '' then
+    begin
+      // это имя файла – добавляем в результирующий массив
+      SetLength(TempFiles, Length(TempFiles) + 1);
+      TempFiles[High(TempFiles)] := Items[i];
+    end;
+  end;
+
+  // Если не указано явно 'front', оставляем 'behind' (по умолчанию)
+  // Проверяем, было ли указание 'front' в списке
+  for i := 0 to High(Items) do
+  begin
+    if Items[i] = 'front' then
+    begin
+      IsBehind := False;
+      Break;
+    end
+    else if Items[i] = 'behind' then
+    begin
+      IsBehind := True;
+      Break;
+    end;
+  end;
+
+  FileNames := TempFiles;
+
+  if Length(FileNames) = 0 then
+    raise Exception.Create('Не указаны файлы спрайта в строке: ' + Desc);
 end;
 
 end.

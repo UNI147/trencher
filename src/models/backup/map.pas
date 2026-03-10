@@ -33,6 +33,7 @@ function SplitString(const S: string; Delimiter: Char): TStringArray;
 var
   i, Start: Integer;
 begin
+  Result := nil;
   SetLength(Result, 0);
   Start := 1;
   for i := 1 to Length(S) do
